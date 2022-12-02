@@ -1,12 +1,14 @@
 package com.a2r.immobilierdz.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
+@Data
 @Getter
 @Setter
 public class Rating {
@@ -16,9 +18,11 @@ public class Rating {
 
     @OneToOne
     @JsonBackReference
-    private House houseId;
+    private House house;
+
     @OneToOne
     @JsonBackReference
-    private User userId;
+    private User user;
+
     private Double rating;
 }

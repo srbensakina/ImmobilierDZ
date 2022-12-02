@@ -27,9 +27,9 @@ public class House {
     private Address address;
 
 
-  /*  @OneToMany
+   @OneToMany(mappedBy = "rating")
     @JsonBackReference
-    private List<Rating> ratings;*/
+    private List<Rating> ratings;
 
 
 }
