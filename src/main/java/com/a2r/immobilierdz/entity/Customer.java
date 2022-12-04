@@ -1,17 +1,19 @@
 package com.a2r.immobilierdz.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import java.util.List;
 
-@Entity
 @Getter
 @Setter
-public class User {
+@Entity
+public class Customer {
 
     @Id
     @GeneratedValue

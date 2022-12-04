@@ -31,5 +31,8 @@ public class House {
     @JsonBackReference
     private List<Rating> ratings;
 
+   @ManyToOne
+    @JsonBackReference
+    private Owner owner;
 
 }
