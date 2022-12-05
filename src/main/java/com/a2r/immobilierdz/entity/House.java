@@ -1,6 +1,7 @@
 package com.a2r.immobilierdz.entity;
 
 
+import com.a2r.immobilierdz.entity.enums.Type;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,16 +23,18 @@ public class House {
     private String name;
     private String description;
     private Boolean occupied;
+    private String photos;
+    private Type type;
     @OneToOne
     @JsonBackReference
     private Address address;
 
 
-   @OneToMany(mappedBy = "rating")
+    @OneToMany(mappedBy = "rating")
     @JsonBackReference
     private List<Rating> ratings;
 
-   @ManyToOne
+    @ManyToOne
     @JsonBackReference
     private Owner owner;
 

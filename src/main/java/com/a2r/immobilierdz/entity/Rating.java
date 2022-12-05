@@ -20,6 +20,8 @@ public class Rating {
     @JsonBackReference
     private House house;
 
+
+    //Check with ranga
     @OneToOne
     @JsonBackReference
     private Customer customer;

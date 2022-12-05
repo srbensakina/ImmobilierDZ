@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import java.util.List;
 
 @Data
 @Entity
@@ -22,4 +23,6 @@ public class Address {
     @OneToOne(mappedBy = "address")
     @JsonManagedReference
     private House house;
+
+
 }

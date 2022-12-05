@@ -1,11 +1,13 @@
 package com.a2r.immobilierdz.service;
 
+import com.a2r.immobilierdz.entity.Address;
 import com.a2r.immobilierdz.entity.House;
 import com.a2r.immobilierdz.repository.AddressRepository;
 import com.a2r.immobilierdz.repository.HouseRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -36,4 +38,10 @@ public class HouseService {
     public List<House> findAll() {
         return houseRepository.findAll();
     }
+
+
+    public List<House> findHousesByCity(String city) {
+        return houseRepository.findAllByAddress_City(city);//.orElseThrow(NoSuchElementException::new);
+    }
+
 }

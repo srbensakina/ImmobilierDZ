@@ -42,4 +42,10 @@ public class HouseController {
         houseService.deleteHouse(id);
     }
 
+
+    @GetMapping("city/{city}")
+    public List<House> findHouseByCity(@PathVariable String city) {
+        return houseService.findHousesByCity(city);
+    }
+
 }
