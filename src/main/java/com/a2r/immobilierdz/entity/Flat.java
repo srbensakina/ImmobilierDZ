@@ -1,14 +1,18 @@
 package com.a2r.immobilierdz.entity;
 
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
-@Getter
-@Setter
+@Data
 @Entity
+@SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Flat extends RealEstate {
 
     private int floor;

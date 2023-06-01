@@ -2,6 +2,7 @@ package com.a2r.immobilierdz.entity;
 
 
 import com.a2r.immobilierdz.entity.enums.Type;
+import com.a2r.immobilierdz.picture.Picture;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -9,19 +10,14 @@ import lombok.experimental.SuperBuilder;
 import javax.persistence.*;
 import java.util.List;
 
-import static javax.persistence.GenerationType.TABLE;
-
 @Data
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
 @Entity
-//@org.hibernate.annotations.Entity(polymorphism = PolymorphismType.EXPLICIT)
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 //@Inheritance(strategy = InheritanceType.JOINED)
-public class RealEstate {
+public abstract class RealEstate {
 
 
     @Id
@@ -31,7 +27,10 @@ public class RealEstate {
     private String name;
     private String description;
     private Boolean occupied;
-    private String photos;
+
+
+    @OneToMany(mappedBy = "realEstate")
+    private List<Picture> pictures;
     @Enumerated(EnumType.STRING)
     private Type type;
     private Integer price;

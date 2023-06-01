@@ -27,7 +27,7 @@ public class Address {
     private String city;
     @OneToOne(mappedBy = "address" , fetch = FetchType.LAZY)
     @JsonManagedReference
-    private House house;
+    private RealEstate realEstate;
 
 
 }

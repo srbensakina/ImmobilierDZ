@@ -4,8 +4,6 @@ import com.a2r.immobilierdz.entity.Address;
 import com.a2r.immobilierdz.entity.Address_;
 import com.a2r.immobilierdz.entity.House;
 import com.a2r.immobilierdz.entity.House_;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.*;

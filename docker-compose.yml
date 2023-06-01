@@ -1,0 +1,102 @@
+version: '3.8'
+
+services:
+  app:
+    image: 'immobilierdz:latest'
+    #image: 'docker.io/library/immobilierdz:latest'
+    build:
+     context: .
+    ports:
+      - "8080:8080"
+    container_name: app
+    depends_on:
+      - keycloakdb
+      - keycloak
+      - discovery
+      - gateway
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://keycloakdb:5432/keycloakdb
+      - SPRING_DATASOURCE_USERNAME=admin
+      - SPRING_DATASOURCE_PASSWORD=password
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - eureka.client.service-url.defaultZone=http://discovery:8761/eureka/
+      - spring.security.oauth2.resourceserver.jwt.issuer-uri=http://keycloak:8086/auth/realms/immobilierDz
+    networks:
+      -  auth-network
+
+  keycloak:
+    image: jboss/keycloak:13.0.0
+    hostname: keycloak
+    restart: on-failure
+    command:
+      - "-b"
+      - "0.0.0.0"
+      - "-Dkeycloak.migration.action=import"
+      - "-Dkeycloak.migration.provider=dir"
+      - "-Dkeycloak.migration.dir=/config/"
+      - "-Dkeycloak.migration.strategy=IGNORE_EXISTING"
+    volumes:
+      - ./config:/config/
+    environment:
+      - KEYCLOAK_USER=admin
+      - KEYCLOAK_PASSWORD=admin
+      - KC_DB_URL_DATABASE=keycloak
+      - KC_DB_URL_HOST=keycloakdb
+      - Dkeycloak.profile.feature.upload_scripts=enabled
+      - DB_USER=admin
+      - DB_PASSWORD=password
+      - DB_VENDOR=postgres
+      - DB_ADDR=keycloakdb
+      - DB_PORT=5432
+      - DB_DATABASE=keycloakdb
+      - JAVA_OPTS_APPEND="-Djboss.as.management.blocking.timeout=600"
+      - JDBC_PARAMS=useSSL=false&allowPublicKeyRetrieval=true
+    networks:
+      - auth-network
+    ports:
+      - "8086:8080"
+    depends_on:
+      - keycloakdb
+  keycloakdb:
+    image: 'postgres:14.7-alpine'
+    container_name: keycloakdb
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password
+      #POSTGRES_DB: keycloakdb
+      POSTGRES_DB: jdbc:postgresql://keycloakdb:5432/immobilierdz
+    volumes:
+        - pgdata:/var/lib/postgresql/data
+    networks:
+      - auth-network
+  discovery:
+    build: /home/srbensakina/IdeaProjects/DiscoveryService #././DiscoveryService/target #/DiscoveryService-0.0.1-SNAPSHOT.jar
+    hostname: discovery
+    ports:
+        - "8761:8761"
+    command: java -jar DiscoveryService-0.0.1-SNAPSHOT.jar
+    #network_mode: host
+    networks:
+      - auth-network
+  gateway:
+    build: /home/srbensakina/IdeaProjects/ApiGaeteway
+    environment:
+      - eureka.client.service-url.defaultZone=http://discovery:8761/eureka/
+    ports:
+        - "8082:8082"
+    command: java -jar ApiGaeteway-0.0.1-SNAPSHOT.jar
+    depends_on:
+      - discovery
+    networks:
+        - auth-network
+volumes:
+   pgdata:
+networks:
+  auth-network:
+
+
+
+
+
+
+

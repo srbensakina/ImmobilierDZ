@@ -4,6 +4,8 @@ import com.a2r.immobilierdz.entity.Address_;
 import com.a2r.immobilierdz.entity.House;
 import com.a2r.immobilierdz.entity.House_;
 import com.a2r.immobilierdz.entity.enums.Type;
+import com.a2r.immobilierdz.picture.PictureRepository;
+import com.a2r.immobilierdz.picture.PictureService;
 import com.a2r.immobilierdz.repository.AddressRepository;
 import com.a2r.immobilierdz.repository.HouseRepository;
 import com.a2r.immobilierdz.repository.specs.HouseSpecification;
@@ -13,7 +15,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -29,11 +33,10 @@ public class HouseService {
 
 
     @Transactional
-    public House insertHouse(House house) {
+    public House insertHouse(House house) throws IOException {
         addressRepository.save(house.getAddress());
         return houseRepository.save(house);
     }
-
 
     public void deleteHouse(Long id) {
         houseRepository.deleteById(id);
@@ -44,12 +47,12 @@ public class HouseService {
     }
 
 
-    @PreAuthorize("hasRole('ROLE_owner')")
+    @PreAuthorize("hasRole('owner')")
     public House findHouseById(Long id) {
         return houseRepository.findById(id).orElseThrow(NoSuchElementException::new);
     }
 
-    @PreAuthorize("hasRole('ROLE_owner')")
+    @PreAuthorize("hasRole('owner')")
     public List<House> findAll() {
         return houseRepository.findAll();
     }

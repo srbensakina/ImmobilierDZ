@@ -10,10 +10,11 @@ import javax.persistence.Entity;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
+@Data
 @Entity
 public class House extends RealEstate {
+
     private int numberOfFloors;
+
 
 }

@@ -9,8 +9,6 @@ import javax.persistence.*;
 
 @Entity
 @Data
-@Getter
-@Setter
 public class Rating {
     @Id
     @GeneratedValue

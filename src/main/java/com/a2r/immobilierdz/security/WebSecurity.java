@@ -17,6 +17,7 @@ public class WebSecurity {
 
         JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(keyclaokRoleConverter);
+        http.csrf().disable();
         http.authorizeRequests()
                 .anyRequest().authenticated().and().oauth2ResourceServer().jwt().jwtAuthenticationConverter(jwtAuthenticationConverter);
         return http.build();
