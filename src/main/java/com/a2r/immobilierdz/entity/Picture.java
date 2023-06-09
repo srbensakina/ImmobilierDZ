@@ -1,4 +1,4 @@
-package com.a2r.immobilierdz.picture;
+package com.a2r.immobilierdz.entity;
 
 
 import com.a2r.immobilierdz.entity.RealEstate;

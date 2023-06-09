@@ -11,4 +11,6 @@ public interface HouseRepository extends JpaRepository<House, Long>, JpaSpecific
 
     List<House> findAllByAddress_City(String city);
 
+    List<House> findAllByOwnerId(String id);
+
 }

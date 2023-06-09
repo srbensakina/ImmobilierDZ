@@ -1,9 +1,19 @@
 version: '3.8'
 
 services:
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: 'rabbitmq'
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+      - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+    networks:
+      - auth-network
   app:
     image: 'immobilierdz:latest'
-    #image: 'docker.io/library/immobilierdz:latest'
     build:
      context: .
     ports:
@@ -38,8 +48,8 @@ services:
     volumes:
       - ./config:/config/
     environment:
-      - KEYCLOAK_USER=admin
-      - KEYCLOAK_PASSWORD=admin
+      #- KEYCLOAK_USER=admin
+      #- KEYCLOAK_PASSWORD=admin
       - KC_DB_URL_DATABASE=keycloak
       - KC_DB_URL_HOST=keycloakdb
       - Dkeycloak.profile.feature.upload_scripts=enabled

@@ -8,7 +8,8 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
-@Data
+@Getter
+@Setter
 public class Rating {
     @Id
     @GeneratedValue
@@ -19,10 +20,8 @@ public class Rating {
     private House house;
 
 
-    //Check with ranga
-    @OneToOne
-    @JsonBackReference
-    private Customer customer;
+    private String customerId;
 
-    private Double rating;
+
+    private Float rating;
 }

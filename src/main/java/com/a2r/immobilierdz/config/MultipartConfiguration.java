@@ -1,4 +1,4 @@
-package com.a2r.immobilierdz;
+package com.a2r.immobilierdz.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

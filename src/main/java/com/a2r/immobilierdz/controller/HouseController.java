@@ -1,13 +1,15 @@
 package com.a2r.immobilierdz.controller;
 
+import com.a2r.immobilierdz.dto.HouseLocationDTO;
 import com.a2r.immobilierdz.entity.House;
 import com.a2r.immobilierdz.entity.enums.Type;
 import com.a2r.immobilierdz.service.HouseService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.List;
 
 
@@ -21,34 +23,34 @@ public class HouseController {
 
 
     @GetMapping("{id}")
-    public House findHouseById(@PathVariable Long id) {
+    public HouseLocationDTO findHouseById(@PathVariable Long id) {
         return houseService.findHouseById(id);
     }
+
     @GetMapping
-    public List<House> findAll() {
+    public List<HouseLocationDTO> findAll() {
         return houseService.findAll();
     }
 
     @PostMapping
-    public House insertHouse(@RequestBody House house) throws IOException {
-        return houseService.insertHouse(house);
+    public HouseLocationDTO insertHouse(@RequestBody HouseLocationDTO houseLocationDto, @AuthenticationPrincipal Jwt principal) {
+        return houseService.insertHouse(houseLocationDto ,principal);
     }
-
 
     @PutMapping
-    public House updateHouse(@RequestBody House house) {
-        return houseService.updateHouse(house);
+    public HouseLocationDTO updateHouse(@RequestBody HouseLocationDTO houseLocationDTO,@AuthenticationPrincipal Jwt principal) {
+        return houseService.updateHouse(houseLocationDTO, principal);
     }
 
 
-    @DeleteMapping("{id}")
-    public void deleteHouse(@PathVariable Long id) {
-        houseService.deleteHouse(id);
+    @DeleteMapping
+    public void deleteHouse(@RequestBody HouseLocationDTO houseLocationDTO, @AuthenticationPrincipal Jwt principal) {
+        houseService.deleteHouse(houseLocationDTO, principal);
     }
 
 
     @GetMapping("city/{city}")
-    public List<House> findHouseByCity(@PathVariable String city) {
+    public List<HouseLocationDTO> findHouseByCity(@PathVariable String city) {
         return houseService.findHousesByCity(city);
     }
 
@@ -56,6 +58,12 @@ public class HouseController {
     @ResponseBody
     public List<House> filterHouses(@RequestParam(required = false) String city, @RequestParam(value = "minPrice", required = false) Integer minPrice, @RequestParam(value = "maxPrice", required = false) Integer maxPrice, @RequestParam(required = false) Type type) {
         return houseService.filterHouses(city, minPrice, maxPrice, type);
+    }
+
+    @GetMapping("{ownerId}")
+    public List<HouseLocationDTO> findHousesByOwner(@AuthenticationPrincipal Jwt principal, @PathVariable String ownerId){
+        return houseService.findHousesByOwner(principal, ownerId);
+
     }
 
 }

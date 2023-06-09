@@ -16,13 +16,12 @@ public class Owner {
     @Id
     @GeneratedValue
     private Long id;
-
     private String name;
     private String email;
     private String phone;
 
 
-    @OneToMany(mappedBy = "owner")
+  /*  @OneToMany(mappedBy = "owner")
     @JsonBackReference
-    private List<House> houses;
+    private List<House> houses;*/
 }

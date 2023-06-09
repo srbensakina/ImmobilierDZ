@@ -1,11 +1,8 @@
-package com.a2r.immobilierdz.picture;
+package com.a2r.immobilierdz.controller;
 
 
-import com.a2r.immobilierdz.picture.Picture;
-import com.a2r.immobilierdz.picture.PictureService;
-import com.a2r.immobilierdz.service.HouseService;
+import com.a2r.immobilierdz.service.PictureService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import java.util.Collections;
+import java.util.List;
 
 
 @RequiredArgsConstructor
@@ -27,12 +25,15 @@ public class PictureController {
     public ResponseEntity<?> findHousePicture(@PathVariable("fileName") String fileName) throws IOException {
         byte[] picture = pictureService.downloadPicture(fileName);
         if (picture != null) {
-            return ResponseEntity.status(HttpStatus.OK)
-                    .contentType(MediaType.valueOf("image/png"))
-                    .body(picture);
+            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.valueOf("image/png")).body(picture);
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping("/{houseId}")
+    public List<String> findHousePicture(@PathVariable("houseId") Long id) throws IOException {
+        return  pictureService.downloadAllHousePictures(id);
     }
 
     @PostMapping("{id}/upload")

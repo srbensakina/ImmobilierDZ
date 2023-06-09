@@ -22,6 +22,5 @@ public class WebSecurity {
                 .anyRequest().authenticated().and().oauth2ResourceServer().jwt().jwtAuthenticationConverter(jwtAuthenticationConverter);
         return http.build();
     }
-
 }
 

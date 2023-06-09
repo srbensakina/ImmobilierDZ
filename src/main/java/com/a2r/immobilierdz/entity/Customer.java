@@ -16,10 +16,11 @@ import java.util.List;
 public class Customer {
 
     @Id
-    @GeneratedValue
-    private Long id;
+    private String id;
     private String name;
     private String email;
+    private String password;
+    private String phone;
 
     @OneToMany(mappedBy = "rating")
     @JsonBackReference
