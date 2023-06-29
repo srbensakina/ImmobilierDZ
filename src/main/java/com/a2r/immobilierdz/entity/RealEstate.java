@@ -2,6 +2,9 @@ package com.a2r.immobilierdz.entity;
 
 
 import com.a2r.immobilierdz.entity.enums.Type;
+import com.a2r.immobilierdz.house.Address;
+import com.a2r.immobilierdz.picture.Picture;
+import com.a2r.immobilierdz.rating.Rating;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -41,14 +44,11 @@ public abstract class RealEstate {
     @JsonBackReference
     private List<Rating> ratings;
 
-  /*  @ManyToOne(fetch = FetchType.LAZY)
-    @JsonBackReference
-    private Owner owner;*/
 
     private String ownerId;
 
 
-    //@Column(columnDefinition = "float default 5")
+    @Column(columnDefinition = "float default 5")
     private Float averageRating = 5f;
 
 

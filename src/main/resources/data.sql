@@ -1,7 +1,7 @@
 
-INSERT INTO owner (id , name, email, phone) VALUES (1 ,'rania' , 'ghdhrxfdhd' , '304225');
-INSERT INTO owner (id , name, email, phone) VALUES (2 ,'malek' , 'dthfthd' , '425287');
-INSERT INTO owner (id , name, email, phone) VALUES (3 ,'houaria' , 'ghdhgsrsrxfdhd' , '8575225');
+--INSERT INTO owner (id , name, email, phone) VALUES (1 ,'rania' , 'ghdhrxfdhd' , '304225');
+--INSERT INTO owner (id , name, email, phone) VALUES (2 ,'malek' , 'dthfthd' , '425287');
+--INSERT INTO owner (id , name, email, phone) VALUES (3 ,'houaria' , 'ghdhgsrsrxfdhd' , '8575225');
 
 INSERT INTO address (id , door_number, street_name, city) VALUES (1 ,'52' , 'med Khmisti' , 'oran');
 INSERT INTO address (id , door_number, street_name, city) VALUES (2 ,'53' , 'amir aek' , 'oran');
