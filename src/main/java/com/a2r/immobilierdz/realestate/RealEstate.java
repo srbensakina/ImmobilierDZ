@@ -1,7 +1,7 @@
-package com.a2r.immobilierdz.entity;
+package com.a2r.immobilierdz.realestate;
 
 
-import com.a2r.immobilierdz.entity.enums.Type;
+import com.a2r.immobilierdz.realestate.enums.Type;
 import com.a2r.immobilierdz.house.Address;
 import com.a2r.immobilierdz.picture.Picture;
 import com.a2r.immobilierdz.rating.Rating;

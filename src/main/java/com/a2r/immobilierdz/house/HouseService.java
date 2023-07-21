@@ -1,6 +1,7 @@
 package com.a2r.immobilierdz.house;
 
-import com.a2r.immobilierdz.entity.enums.Type;
+import com.a2r.immobilierdz.realestate.RealEstateService;
+import com.a2r.immobilierdz.realestate.enums.Type;
 import com.a2r.immobilierdz.house.specs.HouseSpecification;
 import com.a2r.immobilierdz.house.specs.SearchCriteria;
 import lombok.RequiredArgsConstructor;
@@ -18,33 +19,11 @@ import static com.a2r.immobilierdz.house.specs.SearchOperation.*;
 
 @Service
 @RequiredArgsConstructor
-public class HouseService {
-
+public class HouseService implements RealEstateService<HouseLocationDTO>  {
     private final HouseRepository houseRepository;
     private final AddressRepository addressRepository;
     private final HouseMapper houseMapper;
 
-
-
-    @PreAuthorize("hasRole('owner')")
-    @Transactional
-    public HouseLocationDTO insertHouse(HouseLocationDTO houseLocationDto , Jwt principal) {
-        House house = houseMapper.map(houseLocationDto);
-        house.setOwnerId(principal.getSubject());
-        addressRepository.save(house.getAddress());
-        return houseMapper.map(houseRepository.save(house));
-    }
-
-    @PreAuthorize("hasRole('owner')and #houseLocationDTO.ownerId == #principal.subject")
-    public void deleteHouse(HouseLocationDTO  houseLocationDTO, Jwt principal) {
-        houseRepository.delete(houseMapper.map(houseLocationDTO));
-    }
-    @PreAuthorize("hasRole('owner') and #houseLocationDTO.ownerId == #principal.subject")
-    public HouseLocationDTO updateHouse(HouseLocationDTO houseLocationDTO, Jwt principal) {
-        House house = houseMapper.map(houseLocationDTO);
-        addressRepository.save(house.getAddress());
-        return houseMapper.map(houseRepository.save(house));
-    }
 
 
     public HouseLocationDTO findHouseById(Long id) {
@@ -77,6 +56,28 @@ public class HouseService {
 
         return houseRepository.findAll(specification);
 
+    }
+
+    @PreAuthorize("hasRole('owner')")
+    @Transactional
+    @Override
+    public HouseLocationDTO insertHouse(HouseLocationDTO houseLocationDTO, Jwt principal) {
+        House house = houseMapper.map(houseLocationDTO);
+        house.setOwnerId(principal.getSubject());
+        addressRepository.save(house.getAddress());
+        return houseMapper.map(houseRepository.save(house));
+    }
+
+   @PreAuthorize("hasRole('owner')and @houseRepository.findById(id).get().getOwnerId().equals(principal.getSubject())")
+    public void deleteHouse(Long id, Jwt principal) {
+        houseRepository.delete(houseRepository.findById(id).orElseThrow(NoSuchElementException::new));
+    }
+    @PreAuthorize("hasRole('owner') and @houseRepository.findByName(#houseLocationDTO.getName()).get().getOwnerId().equals(principal.getSubject())")
+    @Override
+    public HouseLocationDTO updateHouse(HouseLocationDTO houseLocationDTO, Jwt principal) {
+        House house = houseMapper.map(houseLocationDTO);
+        addressRepository.save(house.getAddress());
+        return houseMapper.map(houseRepository.save(house));
     }
 
 

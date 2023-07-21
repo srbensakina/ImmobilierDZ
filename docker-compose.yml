@@ -73,32 +73,38 @@ services:
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: password
-      #POSTGRES_DB: keycloakdb
       POSTGRES_DB: jdbc:postgresql://keycloakdb:5432/immobilierdz
     volumes:
         - pgdata:/var/lib/postgresql/data
     networks:
       - auth-network
   discovery:
-    build: /home/srbensakina/IdeaProjects/DiscoveryService #././DiscoveryService/target #/DiscoveryService-0.0.1-SNAPSHOT.jar
+    image: raniabensakina/eureka:latest
     hostname: discovery
     ports:
         - "8761:8761"
-    command: java -jar DiscoveryService-0.0.1-SNAPSHOT.jar
-    #network_mode: host
     networks:
       - auth-network
+
   gateway:
-    build: /home/srbensakina/IdeaProjects/ApiGaeteway
+    image: raniabensakina/gateway:latest
+    hostname: gateway
     environment:
       - eureka.client.service-url.defaultZone=http://discovery:8761/eureka/
     ports:
         - "8082:8082"
-    command: java -jar ApiGaeteway-0.0.1-SNAPSHOT.jar
     depends_on:
       - discovery
     networks:
         - auth-network
+
+  maildev:
+    image: maildev/maildev
+    ports:
+      - "1080:1080"
+      - "1025:1025"
+    networks:
+      - auth-network
 volumes:
    pgdata:
 networks:

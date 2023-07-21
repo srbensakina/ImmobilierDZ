@@ -1,6 +1,6 @@
 package com.a2r.immobilierdz.house;
 
-import com.a2r.immobilierdz.entity.enums.Type;
+import com.a2r.immobilierdz.realestate.enums.Type;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -41,11 +41,15 @@ public class HouseController {
     }
 
 
-    @DeleteMapping
+  /*  @DeleteMapping
     public void deleteHouse(@Valid @RequestBody HouseLocationDTO houseLocationDTO, @AuthenticationPrincipal Jwt principal) {
         houseService.deleteHouse(houseLocationDTO, principal);
-    }
+    }*/
 
+   @DeleteMapping("/{id}")
+    public void deleteHouse(@PathVariable Long id, @AuthenticationPrincipal Jwt principal) {
+        houseService.deleteHouse(id, principal);
+    }
 
     @GetMapping("city/{city}")
     public List<HouseLocationDTO> findHouseByCity(@PathVariable String city) {

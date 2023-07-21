@@ -1,9 +1,7 @@
 package com.a2r.immobilierdz.picture;
 
 import com.a2r.immobilierdz.house.House;
-import com.a2r.immobilierdz.picture.Picture;
-import com.a2r.immobilierdz.entity.RealEstate;
-import com.a2r.immobilierdz.picture.PictureRepository;
+import com.a2r.immobilierdz.realestate.RealEstate;
 import com.a2r.immobilierdz.house.specs.RealEstateRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

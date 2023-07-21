@@ -1,23 +1,21 @@
 package com.a2r.immobilierdz.house;
 
-import com.a2r.immobilierdz.entity.RealEstate;
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.a2r.immobilierdz.realestate.RealEstate;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.*;
-import java.util.List;
-
 
 
 @Builder
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
 @Entity
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"doorNumber", "streetName", "city"}))
+
 public class Address {
 
     @Id
@@ -26,9 +24,12 @@ public class Address {
     private String doorNumber;
     private String streetName;
     private String city;
-    @OneToOne(mappedBy = "address" , fetch = FetchType.LAZY)
+    
+    @OneToOne(mappedBy = "address")
     @JsonManagedReference
     private RealEstate realEstate;
+
+
 
 
 }

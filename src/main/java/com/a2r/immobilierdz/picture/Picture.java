@@ -1,7 +1,7 @@
 package com.a2r.immobilierdz.picture;
 
 
-import com.a2r.immobilierdz.entity.RealEstate;
+import com.a2r.immobilierdz.realestate.RealEstate;
 import lombok.*;
 
 import javax.persistence.*;

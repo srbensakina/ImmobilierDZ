@@ -1,7 +1,7 @@
 package com.a2r.immobilierdz.house;
 
-import com.a2r.immobilierdz.entity.enums.Type;
-import com.a2r.immobilierdz.security.WebSecurity;
+import com.a2r.immobilierdz.realestate.enums.Type;
+import com.a2r.immobilierdz.security.config.WebSecurity;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
@@ -152,11 +152,11 @@ class HouseControllerTest {
     }
 
 
-    @Test
+   @Test
     @DisplayName("House can be deleted")
     void testDeleteHouse_whenHouseExists_returnHouse() throws Exception {
 
-        doNothing().when(houseService).deleteHouse(any(HouseLocationDTO.class), any(Jwt.class));
+        doNothing().when(houseService).deleteHouse(any(Long.class), any(Jwt.class));
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/houses")
                 .with(jwt().authorities(new SimpleGrantedAuthority("owner")))
@@ -166,7 +166,7 @@ class HouseControllerTest {
         mockMvc.perform(requestBuilder)
                 .andExpect(status().isOk());
 
-        verify(houseService, times(1)).deleteHouse(any(HouseLocationDTO.class), any(Jwt.class));
+        verify(houseService, times(1)).deleteHouse(any(Long.class), any(Jwt.class));
 
     }
 
