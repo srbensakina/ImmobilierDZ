@@ -21,9 +21,13 @@ import java.util.List;
 //@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class RealEstate {
 
-
+    @SequenceGenerator(
+            name = "real_estate_sequence",
+            sequenceName = "real_estate_sequence",
+            allocationSize = 1
+    )
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE , generator = "real_estate_sequence")
     private Long id;
     private String name;
     private String description;
@@ -45,7 +49,7 @@ public abstract class RealEstate {
     private List<Rating> ratings;
 
 
-    private String ownerId;
+    private Long ownerId;
 
 
     @Column(columnDefinition = "float default 5")
@@ -55,6 +59,10 @@ public abstract class RealEstate {
 
     public Float updateAverageRating(Float newRating){
         return (averageRating+newRating)/2;
+    }
+
+    public Float updateAlreadyExistingAverageRating(Float oldRating){
+        return (averageRating*2)-oldRating;
     }
 
 }

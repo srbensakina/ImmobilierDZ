@@ -4,10 +4,8 @@ import com.a2r.immobilierdz.appuser.AppUser;
 import com.a2r.immobilierdz.appuser.AppUserRole;
 import com.a2r.immobilierdz.appuser.AppUserService;
 import com.a2r.immobilierdz.email.EmailSender;
-import com.a2r.immobilierdz.email.EmailService;
 import com.a2r.immobilierdz.registration.token.ConfirmationToken;
 import com.a2r.immobilierdz.registration.token.ConfirmationTokenService;
-import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,26 +15,19 @@ import java.time.LocalDateTime;
 @Service
 @RequiredArgsConstructor
 public class RegistrationService {
-
-    private final EmailValidator emailValidator;
     private final AppUserService appUserService;
     private final ConfirmationTokenService confirmationTokenService;
 
     private final EmailSender emailSender;
 
     public String register(RegistrationRequest registrationRequest) {
-        boolean isValidEmail = emailValidator.test(registrationRequest.getEmail());
-
-        if (!isValidEmail){
-            throw new IllegalStateException("Email not valid");
-        }
 
         String token = appUserService.signUpUser(
                 AppUser.builder().firstName(registrationRequest.getFirstName())
                         .lastName(registrationRequest.getLastName())
                         .email(registrationRequest.getEmail())
                         .password(registrationRequest.getPassword())
-                        .appUserRole(AppUserRole.USER)
+                        .appUserRole(registrationRequest.getAppUserRole())
                         .build());
 
         String link = "http://localhost:8080/api/v1/registration/confirm?token=" + token;

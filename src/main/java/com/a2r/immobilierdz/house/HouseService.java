@@ -1,33 +1,34 @@
 package com.a2r.immobilierdz.house;
 
+import com.a2r.immobilierdz.exceptions.AddressAlreadyExistsException;
+import com.a2r.immobilierdz.exceptions.AddressNotFoundException;
+import com.a2r.immobilierdz.exceptions.RealEstateNotFoundException;
+import com.a2r.immobilierdz.exceptions.UnauthorizedAccessException;
 import com.a2r.immobilierdz.realestate.RealEstateService;
 import com.a2r.immobilierdz.realestate.enums.Type;
 import com.a2r.immobilierdz.house.specs.HouseSpecification;
 import com.a2r.immobilierdz.house.specs.SearchCriteria;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import static com.a2r.immobilierdz.house.specs.SearchOperation.*;
 
 @Service
 @RequiredArgsConstructor
-public class HouseService implements RealEstateService<HouseLocationDTO>  {
+public class HouseService implements RealEstateService<HouseLocationDTO> {
     private final HouseRepository houseRepository;
     private final AddressRepository addressRepository;
     private final HouseMapper houseMapper;
 
-
-
     public HouseLocationDTO findHouseById(Long id) {
-        return houseMapper.map(houseRepository.findById(id).orElseThrow(NoSuchElementException::new));
+        return houseMapper.map(houseRepository.findById(id).orElseThrow(() -> new RealEstateNotFoundException("House not found with ID:" + id)));
     }
 
     public List<HouseLocationDTO> findAll() {
@@ -58,31 +59,56 @@ public class HouseService implements RealEstateService<HouseLocationDTO>  {
 
     }
 
-    @PreAuthorize("hasRole('owner')")
+    @PreAuthorize("hasRole('ROLE_OWNER')")
     @Transactional
     @Override
-    public HouseLocationDTO insertHouse(HouseLocationDTO houseLocationDTO, Jwt principal) {
+    public HouseLocationDTO insertHouse(HouseLocationDTO houseLocationDTO, String principal) {
         House house = houseMapper.map(houseLocationDTO);
-        house.setOwnerId(principal.getSubject());
+        house.setOwnerId(Long.valueOf(principal));
         addressRepository.save(house.getAddress());
         return houseMapper.map(houseRepository.save(house));
     }
 
-   @PreAuthorize("hasRole('owner')and @houseRepository.findById(id).get().getOwnerId().equals(principal.getSubject())")
-    public void deleteHouse(Long id, Jwt principal) {
-        houseRepository.delete(houseRepository.findById(id).orElseThrow(NoSuchElementException::new));
-    }
-    @PreAuthorize("hasRole('owner') and @houseRepository.findByName(#houseLocationDTO.getName()).get().getOwnerId().equals(principal.getSubject())")
+    @PreAuthorize("hasRole('ROLE_OWNER')")
     @Override
-    public HouseLocationDTO updateHouse(HouseLocationDTO houseLocationDTO, Jwt principal) {
-        House house = houseMapper.map(houseLocationDTO);
-        addressRepository.save(house.getAddress());
+    public void deleteHouse(Long id, String principal) {
+        House house = houseRepository.findById(id).orElseThrow(() -> new RealEstateNotFoundException("House not found"));
+        if (house.getOwnerId().equals(Long.valueOf(principal))) {
+            houseRepository.delete(house);
+            addressRepository.delete(house.getAddress());
+        } else {
+            throw new UnauthorizedAccessException("You are not authorized to delete this house.");
+        }
+    }
+
+    @PreAuthorize("hasRole('ROLE_OWNER')")
+    @Override
+    public HouseLocationDTO updateHouse(HouseLocationDTO houseLocationDTO, String principal, Long houseId) {
+        House house = houseRepository.findById(houseId).orElseThrow(() -> new RealEstateNotFoundException("House not found"));
+        Address address = addressRepository.findById(house.getAddress().getId()).orElseThrow(() -> new AddressNotFoundException("Address not found"));
+        if (!house.getOwnerId().equals(Long.valueOf(principal))) {
+            throw new UnauthorizedAccessException("You are not authorized to update this house.");
+        }
+        address.setCity(houseLocationDTO.getCity());
+        address.setDoorNumber(houseLocationDTO.getDoorNumber());
+        address.setStreetName(houseLocationDTO.getStreetName());
+        house.setNumberOfFloors(houseLocationDTO.getNumberOfFloors());
+        house.setDescription(houseLocationDTO.getDescription());
+        house.setName(houseLocationDTO.getName());
+        house.setPrice(houseLocationDTO.getPrice());
+        house.setOccupied(houseLocationDTO.getOccupied());
+        house.setType(houseLocationDTO.getType());
+        addressRepository.save(address);
         return houseMapper.map(houseRepository.save(house));
     }
 
 
- /*   @PreAuthorize("hasRole('owner') and #ownerId == #principal.subject")
-    public List<HouseLocationDTO> findHousesByOwner(Jwt principal, String ownerId) {
-        return houseMapper.map(houseRepository.findAllByOwnerId(principal.getSubject()));
-    }*/
+    @PreAuthorize("hasRole('ROLE_OWNER')")
+    public List<HouseLocationDTO> findHousesByOwnerId(Long ownerId, String principal) {
+        if (ownerId.equals(Long.valueOf(principal))) {
+            return houseMapper.map(houseRepository.findAllByOwnerId(ownerId));
+        } else {
+            throw new UnauthorizedAccessException("You are only authorized to see the houses you own.");
+        }
+    }
 }

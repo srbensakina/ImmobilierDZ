@@ -1,12 +1,15 @@
 package com.a2r.immobilierdz.picture;
 
-import com.a2r.immobilierdz.house.House;
-import com.a2r.immobilierdz.realestate.RealEstate;
+import com.a2r.immobilierdz.exceptions.NoSuchPictureException;
+import com.a2r.immobilierdz.exceptions.RealEstateNotFoundException;
+import com.a2r.immobilierdz.exceptions.UnauthorizedAccessException;
 import com.a2r.immobilierdz.house.specs.RealEstateRepository;
+import com.a2r.immobilierdz.realestate.RealEstate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -32,7 +35,7 @@ public class PictureService {
         return images;
     }
 
-    public List<String> downloadAllHousePictures(Long id) throws IOException {
+    public List<String> downloadAllHousePictures(Long id) {
         List<String> picturePaths = new ArrayList<>();
         List<Picture> fileDataList = pictureRepository.findAllByRealEstateId(id);
         for (Picture picture: fileDataList
@@ -42,21 +45,32 @@ public class PictureService {
         }
         return picturePaths;
     }
-    @PreAuthorize("hasRole('owner')")
-    public String savePicture(MultipartFile file, Long id) throws IOException {
+
+    @Transactional
+    @PreAuthorize("hasRole('ROLE_OWNER')")
+    public String savePicture(MultipartFile file, Long id , String ownerId) throws IOException {
         String filePath = uploadDirectory + file.getOriginalFilename();
-        RealEstate realEstate = realEstateRepository.save(House.builder().id(id).build());
-        Picture picture = pictureRepository.save(Picture.builder()
-                .name(file.getOriginalFilename())
-                .realEstate(realEstate)
-                .filePath(filePath).build());
+      RealEstate realEstate =  realEstateRepository.findById(id).orElseThrow(() ->new RealEstateNotFoundException("This real estate doesn't exist"));
+        if (realEstate.getOwnerId().equals(Long.valueOf(ownerId))){
+            Picture picture = pictureRepository.save(Picture.builder()
+                    .name(file.getOriginalFilename())
+                    .realEstate(realEstate)
+                    .filePath(filePath).build());
 
-        file.transferTo(new File(filePath));
+            file.transferTo(new File(filePath));
 
-        if (picture != null) {
-            return "file uploaded successfully : " + filePath;
-        }
+            if (picture != null) {
+                return "file uploaded successfully : " + filePath;
+            }
+        }else
+            throw new UnauthorizedAccessException("You are not authorized to add pictures to properties you don't own.");
         return null;
+    }
+
+
+    @PreAuthorize("hasRole('ROLE_OWNER')")
+    public void deletePicture(Long picture_id) {
+       pictureRepository.delete(pictureRepository.findById(picture_id).orElseThrow(() -> new NoSuchPictureException("This picture doesn't exist")));
     }
 
 }

@@ -13,14 +13,12 @@ public interface HouseMapper {
     @Mapping(target = "address.doorNumber", source = "doorNumber")
     @Mapping(target = "address.streetName", source = "streetName")
     @Mapping(target = "address.city", source = "city")
-   // @Mapping(target = "ownerId", source = "ownerId")
     House map(HouseLocationDTO houseLocationDto);
 
 
     @Mapping(source = "address.doorNumber", target = "doorNumber")
     @Mapping(source = "address.streetName", target = "streetName")
     @Mapping(source = "address.city", target = "city")
-    //@Mapping(target = "ownerId", source = "ownerId")
     HouseLocationDTO map(House house);
 
     List<HouseLocationDTO> map(List<House> houseList);

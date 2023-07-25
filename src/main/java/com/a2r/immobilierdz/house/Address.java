@@ -18,8 +18,13 @@ import javax.persistence.*;
 
 public class Address {
 
+    @SequenceGenerator(
+            name = "address_sequence",
+            sequenceName = "address_sequence",
+            allocationSize = 1
+    )
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE , generator = "address_sequence")
     private Long id;
     private String doorNumber;
     private String streetName;

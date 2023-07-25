@@ -10,6 +10,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"customerId", "house_id"}))
 public class Rating {
     @Id
     @GeneratedValue
@@ -19,9 +20,7 @@ public class Rating {
     @JsonBackReference
     private House house;
 
-
-    private String customerId;
-
+    private Long customerId;
 
     private Float rating;
 }

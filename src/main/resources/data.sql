@@ -10,6 +10,8 @@ INSERT INTO address (id , door_number, street_name, city) VALUES (4 ,'55' , 'mou
 INSERT INTO address (id , door_number, street_name, city) VALUES (5 ,'554' , 'lsflsjq' , 'Chrea');
 INSERT INTO address (id , door_number, street_name, city) VALUES (6 ,'35' , 'mhaji el hbib' , 'Chlef');
 
+INSERT INTO app_user (id , app_user_role, email, enabled ,first_name, last_name,locked, password) VALUES (1 ,'OWNER' , 'ranran@gmail.com' , true, 'Rania', 'Bensakina',false , '$2a$10$a3ITSgbOK0fNKeO4LZYOROtzYl7WyAtMAQWszV8hZxJWUiBmrtbE6');
+INSERT INTO app_user (id , app_user_role, email, enabled ,first_name, last_name,locked, password) VALUES (2 ,'OWNER' , 'malmal@gmail.com' , true, 'Malek', 'Bensakina',false , '$2a$10$a3ITSgbOK0fNKeO4LZYOROtzYl7WyAtMAQWszV8hZxJWUiBmrtbE6');
 
 
 --INSERT INTO real_estate (id , name, description,occupied , photos, type, price, address_id , owner_id) VALUES (1 ,'fgdfg' , 'great real estate' , 'true', 'dtdtgd', 'RENT' , 1000 , 1 , 1);

@@ -9,5 +9,7 @@ import java.util.Optional;
 @Repository
 public interface RatingRepository extends JpaRepository<Rating , Long> {
 
-   Optional<Rating> findByHouseIdAndCustomerId(Long houseId ,String customerId);
+   Optional<Rating> findByHouseIdAndCustomerId(Long houseId ,Long customerId);
+
+   boolean existsByCustomerIdAndHouse_Id(Long userId , Long houseId);
 }

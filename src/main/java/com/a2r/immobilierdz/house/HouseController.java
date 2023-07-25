@@ -1,10 +1,14 @@
 package com.a2r.immobilierdz.house;
 
+import com.a2r.immobilierdz.exceptions.AddressAlreadyExistsException;
+import com.a2r.immobilierdz.exceptions.RealEstateNotFoundException;
+import com.a2r.immobilierdz.exceptions.UnauthorizedAccessException;
 import com.a2r.immobilierdz.realestate.enums.Type;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -21,39 +25,55 @@ public class HouseController {
 
 
     @GetMapping("{id}")
-    public HouseLocationDTO findHouseById(@PathVariable Long id) {
-        return houseService.findHouseById(id);
+    public ResponseEntity<?> findHouseById(@PathVariable Long id) {
+        try {
+            HouseLocationDTO houseLocationDTO = houseService.findHouseById(id);
+            return ResponseEntity.ok(houseLocationDTO);
+        } catch(RealEstateNotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch(Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 
     @GetMapping
-    public List<HouseLocationDTO> findAll() {
-        return houseService.findAll();
+    public ResponseEntity<List<HouseLocationDTO>> findAll() {
+        return ResponseEntity.ok(houseService.findAll());
     }
 
     @PostMapping
-    public HouseLocationDTO insertHouse(@Valid @RequestBody HouseLocationDTO houseLocationDto, @AuthenticationPrincipal Jwt principal) {
-        return houseService.insertHouse(houseLocationDto ,principal);
+    public ResponseEntity<?> insertHouse(@Valid @RequestBody HouseLocationDTO houseLocationDto , @AuthenticationPrincipal String principal) {
+        try {
+            return ResponseEntity.status(HttpStatus.CREATED).body(houseService.insertHouse(houseLocationDto , principal ));
+        }catch (AddressAlreadyExistsException ex){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Address Already exits");
+           // throw new AddressAlreadyExistsException("Address Already exits");
+        }
+
     }
 
-    @PutMapping
-    public HouseLocationDTO updateHouse( @Valid @RequestBody HouseLocationDTO houseLocationDTO,@AuthenticationPrincipal Jwt principal) {
-        return houseService.updateHouse(houseLocationDTO, principal);
+    @PutMapping("/{houseId}")
+    public ResponseEntity<HouseLocationDTO> updateHouse( @Valid @RequestBody HouseLocationDTO houseLocationDTO  ,@PathVariable Long houseId, @AuthenticationPrincipal String principal ) {
+        return ResponseEntity.ok(houseService.updateHouse(houseLocationDTO , principal , houseId));
     }
 
-
-  /*  @DeleteMapping
-    public void deleteHouse(@Valid @RequestBody HouseLocationDTO houseLocationDTO, @AuthenticationPrincipal Jwt principal) {
-        houseService.deleteHouse(houseLocationDTO, principal);
-    }*/
-
-   @DeleteMapping("/{id}")
-    public void deleteHouse(@PathVariable Long id, @AuthenticationPrincipal Jwt principal) {
-        houseService.deleteHouse(id, principal);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteHouse(@PathVariable Long id, @AuthenticationPrincipal String principal) {
+        try {
+            houseService.deleteHouse(id, principal);
+            return ResponseEntity.noContent().build();
+        } catch (RealEstateNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (UnauthorizedAccessException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 
     @GetMapping("city/{city}")
-    public List<HouseLocationDTO> findHouseByCity(@PathVariable String city) {
-        return houseService.findHousesByCity(city);
+    public ResponseEntity<List<HouseLocationDTO>> findHouseByCity(@PathVariable String city) {
+        return ResponseEntity.ok(houseService.findHousesByCity(city));
     }
 
     @GetMapping("/filter")
@@ -62,10 +82,10 @@ public class HouseController {
         return houseService.filterHouses(city, minPrice, maxPrice, type);
     }
 
-  /*  @GetMapping("owners/{ownerId}")
-    public List<HouseLocationDTO> findHousesByOwner(@AuthenticationPrincipal Jwt principal, @PathVariable String ownerId){
-        return houseService.findHousesByOwner(principal, ownerId);
+   @GetMapping("owners/{ownerId}")
+    public ResponseEntity<List<HouseLocationDTO>> findHousesByOwnerId( @PathVariable Long ownerId, @AuthenticationPrincipal String principal ){
+        return ResponseEntity.ok(houseService.findHousesByOwnerId(ownerId, principal));
 
-    }*/
+    }
 
 }

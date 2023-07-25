@@ -30,7 +30,7 @@ public class HouseRepositoryTest {
         Address address = Address.builder().id(2L).city("oran").doorNumber("52").streetName("amir Aek").build();
 
         House house = House.builder().id(2L).description("another description")
-               .numberOfFloors(2).name("house2").occupied(true).ownerId("a").type(Type.SALE).price(500000).numberOfFloors(1).address(address).build();
+               .numberOfFloors(2).name("house2").occupied(true).ownerId(1L).type(Type.SALE).price(500000).numberOfFloors(1).address(address).build();
 
        addressRepository.save(house.getAddress());
        houseRepository.save(house);

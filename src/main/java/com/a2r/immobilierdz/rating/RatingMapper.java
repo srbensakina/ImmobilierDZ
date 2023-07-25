@@ -13,10 +13,10 @@ import java.util.List;
 @Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface RatingMapper {
 
-    @Mapping(target = "house.id", source = "houseId")
+    @Mapping(target = "house.id", source = "realEstateId")
     Rating map(RatingDTO ratingDTO);
 
-    @Mapping(source = "house.id", target = "houseId")
+    @Mapping(source = "house.id", target = "realEstateId")
     RatingDTO map(Rating rating);
 
     List<HouseLocationDTO> map(List<House> houseList);
