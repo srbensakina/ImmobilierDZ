@@ -6,7 +6,7 @@
 
   ## Table of Contents
 
-- [Features](#features)
+- [Features](#Features)
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
@@ -23,7 +23,7 @@
 - [Contact Information](#contact-information)
 - [Acknowledgments](#acknowledgments)
   
-<h2>🧐 ## Features</h2>
+<h2>🧐 ##Features</h2>
 
 Here're some of the project's best features:
 
