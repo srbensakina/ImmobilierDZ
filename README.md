@@ -46,10 +46,6 @@ docker-compose up -d
 <p> - Leverage advanced search using `api/v1/houses/filter` with specifications.  </p>
 <p> - Monitor RabbitMQ queues for property-related events, such as calculating average property ratings. </p>
 
-<h2> 🪛 Contributing </h2>
-
-<p> Contributions are welcomed! Kindly follow the [Contribution Guidelines](CONTRIBUTING.md). </p>
-  
   
 <h2>💻 Built with</h2>
 
