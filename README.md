@@ -4,9 +4,26 @@
 
 <p id="description">The Real Estate Backend Project is a comprehensive application backend built using Spring Boot Hibernate PostgreSQL RabbitMQ Spring Security JWT authentication API Gateway Discovery Service and Email Confirmation Service. This robust backend solution facilitates the management of real estate properties encompassing creation retrieval updating and deletion of properties. The platform also features user registration and login functionalities generating JWT tokens for secure authentication. Additionally the project integrates RabbitMQ for managing property-related events and calculating the average rating of properties based on user feedback. The entire backend is containerized using Docker and orchestrated with Docker Compose for streamlined deployment.</p>
 
+  ## Table of Contents
+
+- [Features](#features)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+- [Usage](#usage)
+- [Configuration](#configuration)
+- [API Documentation](#api-documentation)
+- [RabbitMQ Integration](#rabbitmq-integration)
+- [API Gateway](#api-gateway)
+- [Discovery Service](#discovery-service)
+- [Email Confirmation Service](#email-confirmation-service)
+- [Contributing](#contributing)
+- [Testing](#testing)
+- [License](#license)
+- [Contact Information](#contact-information)
+- [Acknowledgments](#acknowledgments)
   
-  
-<h2>🧐 Features</h2>
+<h2>🧐 ## Features</h2>
 
 Here're some of the project's best features:
 
