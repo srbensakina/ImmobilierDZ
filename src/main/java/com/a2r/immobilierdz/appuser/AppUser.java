@@ -18,8 +18,6 @@ import java.util.Collections;
 @NoArgsConstructor
 public class AppUser implements UserDetails {
 
-
-
      @SequenceGenerator(
              name = "user_sequence",
              sequenceName = "user_sequence",
@@ -36,7 +34,8 @@ public class AppUser implements UserDetails {
     private AppUserRole appUserRole;
     private boolean locked = false;
 
-    private boolean enabled = false;
+    // TODO : return it to false when deciding on a message provider
+    private boolean enabled = true;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -80,6 +79,7 @@ public class AppUser implements UserDetails {
 
     @Override
     public boolean isEnabled() {
+        //fix this
         return enabled;
     }
 }

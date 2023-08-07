@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequiredArgsConstructor
+//@RequestMapping("/api/v1/auth")
 @RequestMapping("/rest/auth")
 public class LoginController {
 
@@ -25,12 +26,6 @@ public class LoginController {
     private final JwtUtil jwtUtil;
 
    private final AppUserRepository appUserRepository;
-
-
-
-
-
-
 
     @ResponseBody
     @RequestMapping(value = "/login",method = RequestMethod.POST)

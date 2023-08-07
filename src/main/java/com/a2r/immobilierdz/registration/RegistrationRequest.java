@@ -3,32 +3,27 @@ package com.a2r.immobilierdz.registration;
 import com.a2r.immobilierdz.appuser.AppUserRole;
 import com.a2r.immobilierdz.realestate.enums.EnumValidator;
 import com.a2r.immobilierdz.realestate.enums.Type;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-@Getter
 @AllArgsConstructor
-@EqualsAndHashCode
-@ToString
+@Data
+@NoArgsConstructor
 public class RegistrationRequest {
 
-
     @NotBlank
-    private final String firstName;
+    private String firstName;
     @NotBlank
-    private final String lastName;
+    private String lastName;
     @Email
-    private final String email;
+    private String email;
     @NotBlank
-    private final String password;
+    private String password;
     @NotNull
     @EnumValidator(enumClass = AppUserRole.class,
             message = "The type must either be OWNER or USER")
-    private final AppUserRole appUserRole;
+    private AppUserRole appUserRole;
 }

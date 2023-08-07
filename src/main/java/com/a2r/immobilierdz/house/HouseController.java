@@ -16,7 +16,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/houses")
+@RequestMapping("api/v1/houses")
 @RequiredArgsConstructor
 @Log4j2
 public class HouseController {
@@ -42,19 +42,24 @@ public class HouseController {
     }
 
     @PostMapping
-    public ResponseEntity<?> insertHouse(@Valid @RequestBody HouseLocationDTO houseLocationDto , @AuthenticationPrincipal String principal) {
+    public ResponseEntity<HouseLocationDTO> insertHouse(@Valid @RequestBody HouseLocationDTO houseLocationDto , @AuthenticationPrincipal String principal) {
         try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(houseService.insertHouse(houseLocationDto , principal ));
+        HouseLocationDTO houseLocationDtoResponse = houseService.insertHouse(houseLocationDto , principal ) ;
+        return ResponseEntity.status(HttpStatus.CREATED).body(houseLocationDtoResponse);
         }catch (AddressAlreadyExistsException ex){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Address Already exits");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
            // throw new AddressAlreadyExistsException("Address Already exits");
         }
 
     }
 
     @PutMapping("/{houseId}")
-    public ResponseEntity<HouseLocationDTO> updateHouse( @Valid @RequestBody HouseLocationDTO houseLocationDTO  ,@PathVariable Long houseId, @AuthenticationPrincipal String principal ) {
-        return ResponseEntity.ok(houseService.updateHouse(houseLocationDTO , principal , houseId));
+    public ResponseEntity<?> updateHouse( @Valid @RequestBody HouseLocationDTO houseLocationDTO  ,@PathVariable Long houseId, @AuthenticationPrincipal String principal ) {
+       try {
+           return ResponseEntity.ok(houseService.updateHouse(houseLocationDTO , principal , houseId));
+       }catch (UnauthorizedAccessException unauthorizedAccessException){
+           return ResponseEntity.badRequest().body(unauthorizedAccessException.getMessage());
+       }
     }
 
     @DeleteMapping("/{id}")

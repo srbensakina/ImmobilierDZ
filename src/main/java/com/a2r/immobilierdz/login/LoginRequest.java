@@ -1,11 +1,13 @@
 package com.a2r.immobilierdz.login;
 
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 @Data
 @Builder
+@RequiredArgsConstructor
+@ToString
+@AllArgsConstructor
 public class LoginRequest {
 
     private String email;

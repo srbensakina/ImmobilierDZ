@@ -30,8 +30,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     private final JwtUtil jwtUtil;
     private final ObjectMapper mapper;
 
-    private AppUserService appUserService;
-
     public JwtAuthorizationFilter(JwtUtil jwtUtil, ObjectMapper mapper) {
         this.jwtUtil = jwtUtil;
         this.mapper = mapper;

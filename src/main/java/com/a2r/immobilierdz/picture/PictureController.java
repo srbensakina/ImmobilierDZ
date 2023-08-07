@@ -15,7 +15,7 @@ import java.util.List;
 
 
 @RequiredArgsConstructor
-@RequestMapping("pictures")
+@RequestMapping("api/v1/pictures")
 @RestController
 public class PictureController {
 

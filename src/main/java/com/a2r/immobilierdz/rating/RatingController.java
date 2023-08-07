@@ -15,7 +15,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/ratings")
+@RequestMapping("api/v1/ratings")
 public class RatingController {
 
     private final RatingService ratingService;

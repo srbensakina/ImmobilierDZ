@@ -2,18 +2,18 @@ package com.a2r.immobilierdz.house;
 
 import com.a2r.immobilierdz.realestate.enums.Type;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.oauth2.jwt.Jwt;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.internal.verification.VerificationModeFactory.times;
 
 
 //@SpringBootTest
@@ -46,23 +46,26 @@ class HouseServiceTest {
     }
 
     @Test
-    @Disabled
     public void testCreateHouse_whenValidDetails_returnHouse() {
+        String principal = "123";
 
-        // Stub the behavior of houseRepository.save() to return the expected house object
-        when(houseRepository.save(Mockito.any(House.class))).thenReturn(house);
+        house.setOwnerId(Long.valueOf(principal));
 
-        // Create a mock Jwt object
-        Jwt jwtMock = Mockito.mock(Jwt.class);
+        // Mock the behavior of houseMapper
+        when(houseMapper.map(houseLocationDTO)).thenReturn(house);
 
-        // Call the insertHouse method
-     //   HouseLocationDTO result = houseService.insertHouse(houseLocationDTO, jwtMock);
+        // Mock the behavior of houseRepository
+        when(houseRepository.save(any(House.class))).thenReturn(house);
+
+        // Call the method to be tested
+        HouseLocationDTO result = houseService.insertHouse(houseLocationDTO, principal);
 
         // Verify the interactions and assertions
-        verify(addressRepository).save(house.getAddress());
-    //    assertNotNull(result);
-        verify(houseMapper).map(houseLocationDTO);
-     //   assertThat(result).isEqualTo(houseLocationDTO);
+        verify(houseMapper, times(2)).map(houseLocationDTO);
+        verify(addressRepository, times(1)).save(any(Address.class));
+        verify(houseRepository, times(1)).save(house);
+        assertThat(result).isEqualTo(houseLocationDTO);
+
     }
 
 

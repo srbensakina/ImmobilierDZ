@@ -3,7 +3,7 @@ version: '3.8'
 services:
   rabbitmq:
     image: rabbitmq:3-management-alpine
-    container_name: 'rabbitmq'
+    container_name: rabbitmq
     ports:
       - 5672:5672
       - 15672:15672
@@ -20,8 +20,8 @@ services:
       - "8080:8080"
     container_name: app
     depends_on:
+      - rabbitmq
       - keycloakdb
-      - keycloak
       - discovery
       - gateway
     environment:
@@ -30,43 +30,16 @@ services:
       - SPRING_DATASOURCE_PASSWORD=password
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
       - eureka.client.service-url.defaultZone=http://discovery:8761/eureka/
-      - spring.security.oauth2.resourceserver.jwt.issuer-uri=http://keycloak:8086/auth/realms/immobilierDz
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - spring.rabbitmq.addresses=rabbitmq:5672
+      - spring.mail.host=maildev
+      #- spring_rabbitmq_host=rabbitmq
+      #- spring.rabbitmq.addresses=rabbitmq:5672
+
     networks:
       -  auth-network
 
-  keycloak:
-    image: jboss/keycloak:13.0.0
-    hostname: keycloak
-    restart: on-failure
-    command:
-      - "-b"
-      - "0.0.0.0"
-      - "-Dkeycloak.migration.action=import"
-      - "-Dkeycloak.migration.provider=dir"
-      - "-Dkeycloak.migration.dir=/config/"
-      - "-Dkeycloak.migration.strategy=IGNORE_EXISTING"
-    volumes:
-      - ./config:/config/
-    environment:
-      #- KEYCLOAK_USER=admin
-      #- KEYCLOAK_PASSWORD=admin
-      - KC_DB_URL_DATABASE=keycloak
-      - KC_DB_URL_HOST=keycloakdb
-      - Dkeycloak.profile.feature.upload_scripts=enabled
-      - DB_USER=admin
-      - DB_PASSWORD=password
-      - DB_VENDOR=postgres
-      - DB_ADDR=keycloakdb
-      - DB_PORT=5432
-      - DB_DATABASE=keycloakdb
-      - JAVA_OPTS_APPEND="-Djboss.as.management.blocking.timeout=600"
-      - JDBC_PARAMS=useSSL=false&allowPublicKeyRetrieval=true
-    networks:
-      - auth-network
-    ports:
-      - "8086:8080"
-    depends_on:
-      - keycloakdb
   keycloakdb:
     image: 'postgres:14.7-alpine'
     container_name: keycloakdb
@@ -100,6 +73,8 @@ services:
 
   maildev:
     image: maildev/maildev
+    container_name: maildev
+
     ports:
       - "1080:1080"
       - "1025:1025"
@@ -110,12 +85,7 @@ services:
       - gateway
 volumes:
    pgdata:
+
 networks:
   auth-network:
-
-
-
-
-
-
-
+    driver: bridge
