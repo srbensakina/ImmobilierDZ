@@ -29,7 +29,7 @@ git clone https://github.com/srbensakina/ImmobilierDZ
 <p>2. Navigate to the project directory:</p>
 
 ```
-cd real-estate-backend
+cd ImmobilierDZ
 ```
 
 <p>3. Build and run the application using Docker Compose:</p>
