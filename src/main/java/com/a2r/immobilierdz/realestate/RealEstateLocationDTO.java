@@ -17,6 +17,8 @@ import javax.validation.constraints.*;
 @NoArgsConstructor
 public class RealEstateLocationDTO {
 
+    private Long id;
+
     @NotBlank(message = "The name is required.")
     private String name;
 

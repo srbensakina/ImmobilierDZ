@@ -26,8 +26,6 @@ public class RegistrationService {
                 AppUser.builder().firstName(registrationRequest.getFirstName())
                         .lastName(registrationRequest.getLastName())
                         .email(registrationRequest.getEmail())
-                        // TODO : delete when setting a message provider
-                        .enabled(true)
                         .password(registrationRequest.getPassword())
                         .appUserRole(registrationRequest.getAppUserRole())
                         .build());

@@ -26,16 +26,13 @@ services:
       - gateway
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://keycloakdb:5432/keycloakdb
-      - SPRING_DATASOURCE_USERNAME=admin
-      - SPRING_DATASOURCE_PASSWORD=password
+      - SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
       - eureka.client.service-url.defaultZone=http://discovery:8761/eureka/
       - SPRING_PROFILES_ACTIVE=docker
       - SPRING_RABBITMQ_HOST=rabbitmq
       - spring.rabbitmq.addresses=rabbitmq:5672
-      - spring.mail.host=maildev
-      #- spring_rabbitmq_host=rabbitmq
-      #- spring.rabbitmq.addresses=rabbitmq:5672
 
     networks:
       -  auth-network
@@ -44,8 +41,8 @@ services:
     image: 'postgres:14.7-alpine'
     container_name: keycloakdb
     environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: password
+      POSTGRES_USER: ${SPRING_DATASOURCE_USERNAME}
+      POSTGRES_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
       POSTGRES_DB: jdbc:postgresql://keycloakdb:5432/immobilierdz
     volumes:
         - pgdata:/var/lib/postgresql/data
@@ -71,18 +68,6 @@ services:
     networks:
         - auth-network
 
-  maildev:
-    image: maildev/maildev
-    container_name: maildev
-
-    ports:
-      - "1080:1080"
-      - "1025:1025"
-    networks:
-      - auth-network
-    depends_on:
-      - discovery
-      - gateway
 volumes:
    pgdata:
 

@@ -34,8 +34,7 @@ public class AppUser implements UserDetails {
     private AppUserRole appUserRole;
     private boolean locked = false;
 
-    // TODO : return it to false when deciding on a message provider
-    private boolean enabled = true;
+    private boolean enabled = false;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -79,7 +78,6 @@ public class AppUser implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        //fix this
         return enabled;
     }
 }
