@@ -1,5 +1,6 @@
 package com.a2r.immobilierdz.registration;
 
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,8 +14,8 @@ public class UserRegistrationController {
     private final RegistrationService registrationService;
 
     @PostMapping
-    public String register(@RequestBody @Valid RegistrationRequest registrationRequest){
-        return registrationService.register(registrationRequest);
+    public void register(@RequestBody @Valid RegistrationRequest registrationRequest){
+         registrationService.register(registrationRequest);
     }
 
     @GetMapping(path = "confirm")

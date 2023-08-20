@@ -3,13 +3,17 @@ package com.a2r.immobilierdz.realestate;
 
 import com.a2r.immobilierdz.realestate.enums.EnumValidator;
 import com.a2r.immobilierdz.realestate.enums.Type;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.springframework.validation.annotation.Validated;
 
-import javax.validation.Valid;
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+
 
 @Data
 @SuperBuilder
@@ -29,8 +33,7 @@ public class RealEstateLocationDTO {
     private Boolean occupied;
 
     @NotNull
-    @EnumValidator(enumClass = Type.class,
-    message = "The type must either be RENT or COLLOCATION or SALE")
+   // @EnumValidator(enumClass = Type.class, message = "The type must either be RENT or COLLOCATION or SALE")
     private Type type;
 
     @NotNull(message = "The price is required.")
@@ -46,7 +49,7 @@ public class RealEstateLocationDTO {
     @NotBlank(message = "The street name is required.")
     private String city;
 
-    private Float averageRating = 5f;
+    private Float averageRating = 0f;
 
 
 }

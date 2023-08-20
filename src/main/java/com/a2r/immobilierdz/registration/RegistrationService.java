@@ -6,6 +6,7 @@ import com.a2r.immobilierdz.appuser.AppUserService;
 import com.a2r.immobilierdz.email.EmailSender;
 import com.a2r.immobilierdz.registration.token.ConfirmationToken;
 import com.a2r.immobilierdz.registration.token.ConfirmationTokenService;
+import com.a2r.immobilierdz.utils.NgrokUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +21,7 @@ public class RegistrationService {
 
     private final EmailSender emailSender;
 
-    public String register(RegistrationRequest registrationRequest) {
+    public void register(RegistrationRequest registrationRequest) {
 
         String token = appUserService.signUpUser(
                 AppUser.builder().firstName(registrationRequest.getFirstName())
@@ -29,13 +30,13 @@ public class RegistrationService {
                         .password(registrationRequest.getPassword())
                         .appUserRole(registrationRequest.getAppUserRole())
                         .build());
+      //  String link = "http://localhost:8080/api/v1/registration/confirm?token=" + token;
 
-        String link = "http://localhost:8080/api/v1/registration/confirm?token=" + token;
+        String link = NgrokUtil.getNgrokUrl() + "/api/v1/registration/confirm?token=" + token;
+
 
         emailSender.send(registrationRequest.getEmail()
                 ,buildEmail(registrationRequest.getFirstName() ,link ));
-
-        return token;
 
 
     }

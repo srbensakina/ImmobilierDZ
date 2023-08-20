@@ -16,6 +16,9 @@ services:
     image: 'immobilierdz:latest'
     build:
      context: .
+    env_file:
+      - dev.env
+      #- prod.env
     ports:
       - "8080:8080"
     container_name: app
@@ -25,14 +28,10 @@ services:
       - discovery
       - gateway
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://keycloakdb:5432/keycloakdb
-      - SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME}
-      - SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
+      #- SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME}
+      #- SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
-      - eureka.client.service-url.defaultZone=http://discovery:8761/eureka/
       - SPRING_PROFILES_ACTIVE=docker
-      - SPRING_RABBITMQ_HOST=rabbitmq
-      - spring.rabbitmq.addresses=rabbitmq:5672
 
     networks:
       -  auth-network
@@ -40,6 +39,8 @@ services:
   keycloakdb:
     image: 'postgres:14.7-alpine'
     container_name: keycloakdb
+    env_file:
+      - dev.env
     environment:
       POSTGRES_USER: ${SPRING_DATASOURCE_USERNAME}
       POSTGRES_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}

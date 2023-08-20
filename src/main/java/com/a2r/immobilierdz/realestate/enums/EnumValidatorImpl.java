@@ -1,5 +1,8 @@
 package com.a2r.immobilierdz.realestate.enums;
 
+
+
+
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.util.List;
@@ -19,7 +22,8 @@ public class EnumValidatorImpl implements ConstraintValidator<EnumValidator, Cha
     public boolean isValid(CharSequence value, ConstraintValidatorContext context) {
         if (value == null) {
             return true;
-        }
+    }
+
 
         //context.disableDefaultConstraintViolation();
         context.buildConstraintViolationWithTemplate("The value must be one of " + acceptedValues)

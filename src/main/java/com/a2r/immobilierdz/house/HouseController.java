@@ -9,6 +9,8 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -19,6 +21,8 @@ import java.util.List;
 @RequestMapping("api/v1/houses")
 @RequiredArgsConstructor
 @Log4j2
+//@CrossOrigin(origins = "http://localhost:4200" , allowedHeaders={"Accept"})
+
 public class HouseController {
 
     private final HouseService houseService;
@@ -49,8 +53,8 @@ public class HouseController {
         }catch (AddressAlreadyExistsException ex){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
            // throw new AddressAlreadyExistsException("Address Already exits");
-        }
 
+    }
     }
 
     @PutMapping("/{houseId}")

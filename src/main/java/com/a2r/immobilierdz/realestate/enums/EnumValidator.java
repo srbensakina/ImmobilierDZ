@@ -1,6 +1,8 @@
 package com.a2r.immobilierdz.realestate.enums;
 
 
+
+
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.Documented;

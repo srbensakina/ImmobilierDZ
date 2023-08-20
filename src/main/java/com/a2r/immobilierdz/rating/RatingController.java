@@ -4,6 +4,7 @@ package com.a2r.immobilierdz.rating;
 import com.a2r.immobilierdz.rating.RatingDTO;
 import com.a2r.immobilierdz.rating.Rating;
 import com.a2r.immobilierdz.rating.RatingService;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+
 
 @RestController
 @RequiredArgsConstructor

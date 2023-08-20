@@ -2,11 +2,14 @@ package com.a2r.immobilierdz.exceptions;
 
 
 import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -22,7 +25,9 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-   @Override
+
+
+    @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers,
                                                                   HttpStatus status, WebRequest request) {
         Map<String, List<String>> body = new HashMap<>();
@@ -35,7 +40,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         body.put("Errors", errors);
 
+
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    }
+
+
+    private Map<String, List<String>> getErrorsMap(List<String> errors) {
+        Map<String, List<String>> errorResponse = new HashMap<>();
+        errorResponse.put("errors", errors);
+        return errorResponse;
     }
 
   @Override
