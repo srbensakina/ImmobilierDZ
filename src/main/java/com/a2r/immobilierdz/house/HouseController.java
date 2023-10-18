@@ -6,6 +6,9 @@ import com.a2r.immobilierdz.exceptions.UnauthorizedAccessException;
 import com.a2r.immobilierdz.realestate.enums.Type;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -21,7 +24,6 @@ import java.util.List;
 @RequestMapping("api/v1/houses")
 @RequiredArgsConstructor
 @Log4j2
-//@CrossOrigin(origins = "http://localhost:4200" , allowedHeaders={"Accept"})
 
 public class HouseController {
 
@@ -40,9 +42,13 @@ public class HouseController {
         }
     }
 
+    @Cacheable("houses")
     @GetMapping
-    public ResponseEntity<List<HouseLocationDTO>> findAll() {
-        return ResponseEntity.ok(houseService.findAll());
+    public ResponseEntity<Page<HouseLocationDTO>> findAll(
+            @RequestParam() int page,
+            @RequestParam() int pageSize) {
+        Page<HouseLocationDTO> resultPage = houseService.findAll(page, pageSize);
+        return ResponseEntity.ok(resultPage);
     }
 
     @PostMapping
@@ -85,11 +91,23 @@ public class HouseController {
         return ResponseEntity.ok(houseService.findHousesByCity(city));
     }
 
-    @GetMapping("/filter")
+   /* @GetMapping("/filter")
     @ResponseBody
     public List<House> filterHouses(@RequestParam(required = false) String city, @RequestParam(value = "minPrice", required = false) Integer minPrice, @RequestParam(value = "maxPrice", required = false) Integer maxPrice, @RequestParam(required = false) Type type) {
         return houseService.filterHouses(city, minPrice, maxPrice, type);
+    }*/
+
+    @GetMapping("/filter")
+    public ResponseEntity<Page<HouseLocationDTO>> filterHouses(
+            @RequestParam(required = false) String city,
+            @RequestParam(value = "minPrice", required = false) Integer minPrice,
+            @RequestParam(value = "maxPrice", required = false) Integer maxPrice,
+            @RequestParam(required = false) Type type,
+           @RequestParam() int page,  @RequestParam() int pageSize) {
+        Page<HouseLocationDTO> filteredHouses = houseService.filterHouses(city, minPrice, maxPrice, type, page , pageSize);
+        return ResponseEntity.ok(filteredHouses);
     }
+
 
    @GetMapping("owners/{ownerId}")
     public ResponseEntity<List<HouseLocationDTO>> findHousesByOwnerId( @PathVariable Long ownerId, @AuthenticationPrincipal String principal ){

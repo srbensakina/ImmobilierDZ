@@ -6,6 +6,7 @@ import com.a2r.immobilierdz.house.Address;
 import com.a2r.immobilierdz.picture.Picture;
 import com.a2r.immobilierdz.rating.Rating;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -34,13 +35,14 @@ public abstract class RealEstate {
     private Boolean occupied;
 
 
-    @OneToMany(mappedBy = "realEstate")
+    @OneToMany(mappedBy = "realEstate", fetch = FetchType.EAGER)
+    @JsonBackReference
     private List<Picture> pictures;
     @Enumerated(EnumType.STRING)
     private Type type;
     private Integer price;
     @OneToOne(fetch = FetchType.LAZY)
-    @JsonBackReference
+    @JsonManagedReference
     private Address address;
 
 

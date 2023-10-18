@@ -9,5 +9,8 @@ import java.util.Optional;
 public interface PictureRepository extends JpaRepository<Picture, Long> {
     Optional<Picture> findByName(String name);
 
-    List<Picture>findAllByRealEstateId(Long id);
+   List<Picture>findAllByRealEstateId(Long id);
+
+
+
 }

@@ -20,6 +20,6 @@ public class CorsConfiguration {
                         .allowedHeaders("*");
             }
         };
-        }
     }
+}
 

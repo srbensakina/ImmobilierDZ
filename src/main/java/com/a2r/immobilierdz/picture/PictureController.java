@@ -2,7 +2,9 @@ package com.a2r.immobilierdz.picture;
 
 
 import com.a2r.immobilierdz.exceptions.NoSuchPictureException;
+import com.a2r.immobilierdz.rating.RatingMapper;
 import lombok.RequiredArgsConstructor;
+import org.apache.hc.core5.http.ParseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,7 @@ import java.util.List;
 public class PictureController {
 
     private final PictureService pictureService;
+    private final PictureMapper pictureMapper;
 
     @GetMapping("/{fileName}")
     public ResponseEntity<?> downloadPicture(@PathVariable("fileName") String fileName) throws IOException {
@@ -32,17 +35,28 @@ public class PictureController {
     }
 
     @GetMapping("/all/{houseId}")
-    public List<String> downloadAllHousePictures(@PathVariable("houseId") Long id) throws IOException {
-        return  pictureService.downloadAllHousePictures(id);
+    public List<PictureDTO> downloadAllHousePictures(@PathVariable("houseId") Long id) {
+      //  return pictureMapper.map(pictureService.downloadAllHousePictures(id));
+          return pictureMapper.map(pictureService.downloadAllHousePictures(id));
     }
 
-    @DeleteMapping("/{picture_id}")
+  /*  @DeleteMapping("/{picture_id}")
     public ResponseEntity<?> deletePicture( @PathVariable Long picture_id) {
         try {
             pictureService.deletePicture(picture_id);
             return ResponseEntity.ok().body(null);
         } catch (NoSuchPictureException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("This picture doesn't exist");
+        }
+    }*/
+
+    @DeleteMapping("/{file_path}")
+    public ResponseEntity<?> deletePicture( @PathVariable String file_path) {
+        try {
+            pictureService.deletePicture(file_path);
+            return ResponseEntity.ok().body(null);
+        } catch (NoSuchPictureException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex);
         }
     }
 
@@ -53,6 +67,8 @@ public class PictureController {
             return ResponseEntity.ok("File uploaded successfully!");
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error uploading file.");
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
         }
     }
 }

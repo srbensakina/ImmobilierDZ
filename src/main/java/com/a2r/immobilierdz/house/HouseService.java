@@ -10,6 +10,9 @@ import com.a2r.immobilierdz.house.specs.HouseSpecification;
 import com.a2r.immobilierdz.house.specs.SearchCriteria;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -31,32 +34,31 @@ public class HouseService implements RealEstateService<HouseLocationDTO> {
         return houseMapper.map(houseRepository.findById(id).orElseThrow(() -> new RealEstateNotFoundException("House not found with ID:" + id)));
     }
 
-    public List<HouseLocationDTO> findAll() {
+   /* public List<HouseLocationDTO> findAll() {
         return houseMapper.map(houseRepository.findAll());
-    }
+    }*/
 
 
-    public List<HouseLocationDTO> findHousesByCity(String city) {
+   public List<HouseLocationDTO> findHousesByCity(String city) {
         return houseMapper.map(houseRepository.findAllByAddress_City(city));
     }
 
-    public List<House> filterHouses(String city, Integer minPrice, Integer maxPrice, Type type) {
+    public Page<HouseLocationDTO> findAll(int page, int pageSize) {
+        Pageable pageable = PageRequest.of(page, pageSize);
+        Page<House> entities = houseRepository.findAll(pageable);
+        return entities.map(houseMapper::map);
+    }
+    public Page<HouseLocationDTO> filterHouses(String city, Integer minPrice, Integer maxPrice, Type type, int page, int pageSize) {
+        Pageable pageable = PageRequest.of(page, pageSize);
         List<SearchCriteria> criteriaList = new ArrayList<>();
-
         if (city != null) criteriaList.add(new SearchCriteria(Address_.CITY, city, EQUAL));
-
-
         if (minPrice != null) criteriaList.add(new SearchCriteria(House_.PRICE, minPrice, GREATER_THAN_EQUAL));
-
-
         if (maxPrice != null) criteriaList.add(new SearchCriteria(House_.PRICE, maxPrice, LESS_THAN_EQUAL));
-
-
         if (type != null) criteriaList.add(new SearchCriteria(House_.TYPE, type, EQUAL));
+
         Specification<House> specification = new HouseSpecification(criteriaList);
 
-        return houseRepository.findAll(specification);
-
+        return houseRepository.findAll(specification, pageable).map(houseMapper::map);
     }
 
     @PreAuthorize("hasRole('ROLE_OWNER')")

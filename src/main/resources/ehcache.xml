@@ -1,0 +1,12 @@
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="ehcache.xsd"
+         updateCheck="true"
+         monitoring="autodetect"
+         dynamicConfig="true">
+    <cache name="houses"
+           maxEntriesLocalHeap="100"
+           eternal="false"
+           timeToLiveSeconds="300"
+           timeToIdleSeconds="60">
+    </cache>
+</ehcache>

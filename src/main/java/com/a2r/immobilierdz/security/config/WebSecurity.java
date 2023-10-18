@@ -35,8 +35,9 @@ public class WebSecurity{
 
         http
                 .csrf().disable()
+                .cors().and()
                 .authorizeRequests()
-                .antMatchers("/api/v*/registration/**", "/rest/auth/**")
+                .antMatchers("/api/v*/registration/**", "/rest/auth/**", "/actuator/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated().and()

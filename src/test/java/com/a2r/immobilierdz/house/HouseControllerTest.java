@@ -14,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -97,8 +98,8 @@ class HouseControllerTest {
 
     @Test
     @DisplayName("All houses can be retrieved")
-    void testGetAllHouses_whenValidRequest_returnAllHouses() throws Exception {
-        when(houseService.findAll()).thenReturn(houseLocationDTOS);
+    void testGetAllHouses_whenValidRequest_returnAllHouses(Pageable pageable) throws Exception {
+       // when(houseService.findAll()).thenReturn(houseLocationDTOS);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/api/v1//houses")
                 .with(jwt().authorities(new SimpleGrantedAuthority("ROLE_OWNER"))

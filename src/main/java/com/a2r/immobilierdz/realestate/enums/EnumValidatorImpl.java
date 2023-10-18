@@ -21,7 +21,7 @@ public class EnumValidatorImpl implements ConstraintValidator<EnumValidator, Cha
     @Override
     public boolean isValid(CharSequence value, ConstraintValidatorContext context) {
         if (value == null) {
-            return true;
+            return false;
     }
 
 
@@ -32,4 +32,14 @@ public class EnumValidatorImpl implements ConstraintValidator<EnumValidator, Cha
 
 
     }
+
+    /*    if (!acceptedValues.contains(value.toString())) {
+            context.disableDefaultConstraintViolation();
+            context.buildConstraintViolationWithTemplate("The value must be one of " + acceptedValues)
+                    .addConstraintViolation();
+            return false; // Invalid value
+        }
+
+        return true; // Valid value
+    }*/
 }
